@@ -1,6 +1,9 @@
 // @ts-check
 const tf = require("@tensorflow/tfjs");
 require("@tensorflow/tfjs-node");
+
+console.log(tf.getBackend())
+
 global.fetch = require("node-fetch");
 
 const minimist = require("minimist");
@@ -19,9 +22,13 @@ let args = minimist(process.argv.slice(2), {
         dense_units: 100,
         epochs: 50,
         learning_rate: 0.0001
-    }
+    },
 });
 
+
+args.images_dir = '/Users/joel/Documents/src/node-tfjs-retrain/images/train'
+args.model_dir = './models' +
+    ''
 if (!args.images_dir) {
     throw new Error("--images_dir not specified.");
 }
@@ -32,7 +39,6 @@ if (!args.model_dir) {
 
 async function init() {
     await data.loadLabelsAndImages(args.images_dir);
-
     console.time("Loading Model");
     await Model.init();
     console.timeEnd("Loading Model");
